@@ -21,13 +21,20 @@ def is_image(file):
 def image_basename(filename):
     return os.path.basename(filename).split('.')[0]
 
+# def image_path(root, basename):
+#     path = ''
+#     if basename.startswith('C'):
+#         path = os.path.join(root, '{}.jpg'.format(basename))
+#     else:
+#         path = os.path.join(root, '{}.JPG'.format(basename))
+#     return path
+
+
 def image_path(root, basename):
     path = ''
-    if basename.startswith('C'):
-        path = os.path.join(root, '{}.jpg'.format(basename))
-    else:
-        path = os.path.join(root, '{}.JPG'.format(basename))
+    path = os.path.join(root, '{}.jpg'.format(basename))
     return path
+
 
 def label_path(root, basename):
     return os.path.join(root, '{}.png'.format(basename))
