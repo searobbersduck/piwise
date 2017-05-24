@@ -6,6 +6,8 @@
 import numpy as np
 import torch
 
+import math
+
 from PIL import Image
 from argparse import ArgumentParser
 
@@ -149,9 +151,32 @@ def train(args, model):
 def evaluate(args, model):
     model.eval()
 
-    image = input_transform(Image.open(args.image))
-    label = model(Variable(image, volatile=True).unsqueeze(0))
-    label = color_transform(label[0].data.max(0)[1])
+    im = Image.open(args.image)
+    np_im = np.array(im)
+
+    row = math.ceil(np_im.shape[0]/256)
+    column = math.ceil(np_im.shape[1]/256)
+
+    label = np.zeros(im.shape)
+
+    for i in range(row):
+        for j in range(column):
+            im_patch = np_im[
+                i*256:(i+1)*256, j*256:(j+1)*256
+            ]
+            im_patch = input_transform(Image.fromarray(im_patch))
+
+            label_patch = model(Variable(im_patch, volatile=True).unsqueeze(0))
+
+            # label_patch = label_patch[0].cpu().max(0)[1].data
+
+            label_patch = color_transform(label_patch[0].data.max(0)[1])
+
+            label[i*256:(i+1)*256, j*256:(j+1)*256] = label_patch
+
+    # image = input_transform(Image.open(args.image))
+    # label = model(Variable(image, volatile=True).unsqueeze(0))
+    # label = color_transform(label[0].data.max(0)[1])
 
     image_transform(label).save(args.label)
 
