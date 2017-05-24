@@ -31,6 +31,7 @@ from torchvision.transforms import Compose, CenterCrop, Scale, Normalize
 from MA.transform import ToLabel, Relabel
 from MA.dataset import MA
 
+torch.cuda.set_device(1)
 
 NUM_CHANNELS = 3
 NUM_CLASSES = 2
@@ -171,14 +172,14 @@ def evaluate(args, model):
             # label_patch = label_patch[0].cpu().max(0)[1].data
 
             label_patch = color_transform(label_patch[0].data.max(0)[1])
-
+            label_patch = np.array(image_transform(label_patch))
             label[i*256:(i+1)*256, j*256:(j+1)*256] = label_patch
 
     # image = input_transform(Image.open(args.image))
     # label = model(Variable(image, volatile=True).unsqueeze(0))
     # label = color_transform(label[0].data.max(0)[1])
 
-    image_transform(label).save(args.label)
+    Image.fromarray(label).save(args.label)
 
 
 def main(args):
