@@ -4,9 +4,12 @@ from torch.utils.data import Dataset
 
 import os
 
+import math
+
 __all__ = [
     'MA',
-    'image_basename'
+    'image_basename',
+    'eval_ds',
 ]
 
 EXTENSIONS = ['.jpg', '.png', '.JPG']
@@ -70,6 +73,35 @@ class MA(Dataset):
 
     def __len__(self):
         return len(self.filenames)
+
+
+
+class eval_ds(Dataset):
+    def __init__(self, imagepath, input_transform, patch_size=(256,256)):
+        self.image = Image.open(imagepath)
+        self.row = math.ceil(self.image.size[1]/patch_size[0])
+        self.column = math.ceil(self.image.size[0]/patch_size[1])
+        # self.row = 4
+        # self.column = 4
+        self.patch_size = patch_size
+        self.len = self.row * self.column
+        self.input_transform = input_transform
+        print('init')
+
+    def __getitem__(self, item):
+        idx = int(item)
+        currow = idx // self.column
+        curcolumn = idx % self.column
+        image_patch = self.image.crop((curcolumn*self.patch_size[1],
+                                       currow * self.patch_size[0],
+                                       (curcolumn+1)*self.patch_size[1],
+                                      (currow + 1) * self.patch_size[0])
+        )
+        return self.input_transform(image_patch)
+
+    def __len__(self):
+        return self.len
+
 
 def main():
     ma = MA('/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata')

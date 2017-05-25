@@ -29,7 +29,7 @@ import MA
 from torchvision.transforms import Compose, CenterCrop, Scale, Normalize
 
 from MA.transform import ToLabel, Relabel
-from MA.dataset import MA
+from MA.dataset import MA, eval_ds
 
 torch.cuda.set_device(1)
 
@@ -42,6 +42,12 @@ image_transform = ToPILImage()
 input_transform = Compose([
     Scale(256),
     CenterCrop(256),
+    ToTensor(),
+    Normalize([.485, .456, .406], [.229, .224, .225]),
+])
+
+eval_input_transform = Compose([
+    Scale(256),
     ToTensor(),
     Normalize([.485, .456, .406], [.229, .224, .225]),
 ])
@@ -149,37 +155,50 @@ def train(args, model):
 
 
 
+# def evaluate(args, model):
+#     model.eval()
+#
+#     im = Image.open(args.image)
+#     np_im = np.array(im)
+#
+#     row = math.ceil(np_im.shape[0]/256)
+#     column = math.ceil(np_im.shape[1]/256)
+#
+#     label = np.zeros(im.shape)
+#
+#     for i in range(row):
+#         for j in range(column):
+#             im_patch = np_im[
+#                 i*256:(i+1)*256, j*256:(j+1)*256
+#             ]
+#             im_patch = input_transform(Image.fromarray(im_patch))
+#
+#             label_patch = model(Variable(im_patch, volatile=True).unsqueeze(0))
+#
+#             # label_patch = label_patch[0].cpu().max(0)[1].data
+#
+#             label_patch = color_transform(label_patch[0].data.max(0)[1])
+#             label_patch = np.array(image_transform(label_patch))
+#             label[i*256:(i+1)*256, j*256:(j+1)*256] = label_patch
+#
+#     # image = input_transform(Image.open(args.image))
+#     # label = model(Variable(image, volatile=True).unsqueeze(0))
+#     # label = color_transform(label[0].data.max(0)[1])
+#
+#     Image.fromarray(label).save(args.label)
+
+
 def evaluate(args, model):
     model.eval()
 
-    im = Image.open(args.image)
-    np_im = np.array(im)
+    loader = DataLoader(
+        eval_ds(args, eval_input_transform),
+        num_workers=1, batch_size=1, shuffle=False)
 
-    row = math.ceil(np_im.shape[0]/256)
-    column = math.ceil(np_im.shape[1]/256)
-
-    label = np.zeros(im.shape)
-
-    for i in range(row):
-        for j in range(column):
-            im_patch = np_im[
-                i*256:(i+1)*256, j*256:(j+1)*256
-            ]
-            im_patch = input_transform(Image.fromarray(im_patch))
-
-            label_patch = model(Variable(im_patch, volatile=True).unsqueeze(0))
-
-            # label_patch = label_patch[0].cpu().max(0)[1].data
-
-            label_patch = color_transform(label_patch[0].data.max(0)[1])
-            label_patch = np.array(image_transform(label_patch))
-            label[i*256:(i+1)*256, j*256:(j+1)*256] = label_patch
-
-    # image = input_transform(Image.open(args.image))
-    # label = model(Variable(image, volatile=True).unsqueeze(0))
-    # label = color_transform(label[0].data.max(0)[1])
-
-    Image.fromarray(label).save(args.label)
+    for i, batch in enumerate(loader):
+        label = model(Variable(batch,  volatile=True))
+        label = color_transform(label[0].data.max(0)[1])
+        image_transform(label).save('{}_{}'.format(i,args.label))
 
 
 def main(args):

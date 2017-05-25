@@ -5,3 +5,5 @@ MAdata_patches/*
 .idea
 .idea/*
 .idea/vcs.xml
+MA/__pycache__/*
+MA/__pycache__*
