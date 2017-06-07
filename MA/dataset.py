@@ -97,7 +97,7 @@ class eval_ds(Dataset):
                                        (curcolumn+1)*self.patch_size[1],
                                       (currow + 1) * self.patch_size[0])
         )
-        return self.input_transform(image_patch)
+        return self.input_transform(image_patch), currow, curcolumn
 
     def __len__(self):
         return self.len

@@ -192,13 +192,23 @@ def evaluate(args, model):
     model.eval()
 
     loader = DataLoader(
-        eval_ds(args, eval_input_transform),
+        eval_ds(args.image, eval_input_transform),
         num_workers=1, batch_size=1, shuffle=False)
 
-    for i, batch in enumerate(loader):
+    raw = Image.open(args.image)
+
+    np_img = np.zeros((1024,1024,3), dtype=np.uint8)
+
+    for i, (batch, row, col) in enumerate(loader):
         label = model(Variable(batch,  volatile=True))
         label = color_transform(label[0].data.max(0)[1])
-        image_transform(label).save('{}_{}'.format(i,args.label))
+        # image_transform(label).save('{}_{}'.format(i,args.label))
+        img_patch = np.asarray(image_transform(label))
+        np_img[row*256:(row+1)*256, col*256:(col+1)*256] = img_patch
+
+    out_img = np.fromarrays(np_img)
+    out_img = Image.blend(raw, out_img, 0.7)
+    out_img.save('blend_{}'.format(args.label))
 
 
 def main(args):

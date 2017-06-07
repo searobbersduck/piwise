@@ -7,3 +7,7 @@ MAdata_patches/*
 .idea/vcs.xml
 MA/__pycache__/*
 MA/__pycache__*
+png
+MA/*.png
+MA/*.jpeg
+png.zip
