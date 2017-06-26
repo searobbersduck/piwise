@@ -357,4 +357,4 @@ class PSPNet(nn.Module):
         ], 1))
         print('final', x.size())
 
-        return F.upsample_bilinear(final, x.size()[2:])
+        return F.upsample_bilinear(self.final, x.size()[2:])

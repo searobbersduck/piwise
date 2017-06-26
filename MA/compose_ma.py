@@ -2,6 +2,11 @@ from glob import glob
 from PIL import Image
 import numpy as np
 
+
+
+
+# #test assignment
+
 # imgs = glob('../png/*.png')
 #
 # im1 = np.asarray(Image.open(imgs[0]))
@@ -22,6 +27,14 @@ import numpy as np
 #
 # img_big.save('./ma.png')
 
+
+
+
+
+
+
+# #test blend
+
 # im1 = Image.open('992_left.jpeg')
 # im2 = Image.open('ma.png')
 # im_tmp = im2.crop((0,0,im1.width, im1.height))
@@ -31,3 +44,23 @@ import numpy as np
 # im3.save('blend.png')
 #
 # print(im_tmp)
+
+
+
+
+# #test paste
+
+im1 = Image.open('992_left.jpeg').convert('L').convert('RGB')
+im2 = Image.open('ma.png')
+im3 = Image.open('ma.png').convert('L')
+
+im3 = Image.new('L', im2.size)
+
+for i in range(im3.width):
+    for j in range(im3.height):
+        if im3.load()[i,j] > 0:
+            print('1')
+
+im1.paste(im2, (0,0), im3)
+
+im1.show()
