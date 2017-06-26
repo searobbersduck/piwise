@@ -31,7 +31,7 @@ from torchvision.transforms import Compose, CenterCrop, Scale, Normalize
 from MA.transform import ToLabel, Relabel
 from MA.dataset import MA, eval_ds
 
-torch.cuda.set_device(1)
+torch.cuda.set_device(0)
 
 NUM_CHANNELS = 3
 NUM_CLASSES = 2
@@ -191,14 +191,14 @@ def train(args, model):
 def evaluate(args, model):
     model.eval()
 
-    raw = Image.open(args.image)
-
     from glob import glob
     import os
     imgs = glob('/ahe_256/*.png')
 
     for raw in imgs:
-        img = eval_input_transform(raw)
+        raw1 = Image.open(raw)
+
+        img = eval_input_transform(raw1)
 
         var_img = Variable(img, volatile=True).unsqueeze(0)
 
