@@ -19,6 +19,8 @@ from basic_net.network import FCN8
 
 import torch.backends.cudnn as cudnn
 
+torch.cuda.set_device(0)
+
 def arg_parse():
     parser = argparse.ArgumentParser(description='Segmentation algorithm parameters')
     parser.add_argument('--cuda', action='store_true')
