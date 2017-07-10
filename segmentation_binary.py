@@ -119,7 +119,7 @@ def train(opt, model, use_cuda):
                 average = sum(epoch_loss) / len(epoch_loss)
                 print(f'loss: {average} (epoch: {epoch}, step: {step})')
             if opt.steps_save > 0 and step % opt.steps_save == 0:
-                filename = f'{args.model}-{epoch:03}-{step:04}.pth'
+                filename = f'fcn8-{epoch:03}-{step:04}.pth'
                 torch.save(model.cpu().state_dict(), filename)
                 print(f'save: {filename} (epoch: {epoch}, step: {step})')
 
