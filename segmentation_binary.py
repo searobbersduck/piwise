@@ -7,7 +7,7 @@ from torch.optim import SGD
 from torchvision.transforms import Compose, CenterCrop, Scale, Normalize, ToTensor, ToPILImage
 from MA.transform import ToLabel, Relabel
 
-from MA.dataset import MA
+from basic_net.dataset import dt_ma
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
 
@@ -67,7 +67,7 @@ def get_model():
 
 
 def train(opt, model, use_cuda):
-    loader = DataLoader(MA(opt.root, input_transform, target_transform),
+    loader = DataLoader(dt_ma(opt.root, input_transform, target_transform),
                         num_workers=opt.workers,
                         batch_size=opt.batch,
                         shuffle=True)
