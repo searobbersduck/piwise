@@ -193,7 +193,7 @@ def evaluate(args, model):
 
     from glob import glob
     import os
-    imgs = glob('/ahe_256/*.png')
+    imgs = glob('./1_bk/ahe_256/*.png')
 
     for raw in imgs:
         raw1 = Image.open(raw)
@@ -206,7 +206,7 @@ def evaluate(args, model):
 
         label = color_transform(label[0].data.max(0)[1])
 
-        out = 'ahe_256_labels/' + os.path.basename(raw).split('.')[0] + '_label.png'
+        out = './1_bk/ahe_256_labels/' + os.path.basename(raw).split('.')[0] + '_label.png'
         image_transform(label).save(out)
         print(out)
 
