@@ -206,7 +206,7 @@ def evaluate(args, model):
 
         label = color_transform(label[0].data.max(0)[1])
 
-        out = 'ahe_256_labels/' + os.path.basename(img).spit('.')[0] + '_label.png'
+        out = 'ahe_256_labels/' + os.path.basename(raw).split('.')[0] + '_label.png'
         image_transform(label).save(out)
         print(out)
 
