@@ -81,7 +81,7 @@ def train(opt, model, use_cuda):
     else:
         criterion = CrossEntropyLoss2d(weight)
 
-    criterion = CrossEntropyLoss2d()
+    criterion = CrossEntropyLoss2d().cuda()
 
     optimizer = SGD(model.parameters(), 1e-4, .9, 2e-5)
 
