@@ -44,7 +44,7 @@ def vgg16(pretrained, **kwargs):
 
 class FCN8(nn.Module):
     def __init__(self, num_classes, pretrained_vgg_model):
-        super.__init__()
+        super().__init__()
         feats = list(vgg16(pretrained_vgg_model).features.children())
 
         self.feats = nn.Sequential(*feats[0:9])
