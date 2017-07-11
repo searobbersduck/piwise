@@ -24,15 +24,12 @@ from piwise.transform import Colorize
 from piwise.visualize import Dashboard
 
 
-# import MA
+import MA
 
 from torchvision.transforms import Compose, CenterCrop, Scale, Normalize
 
 from MA.transform import ToLabel, Relabel
-# from MA.dataset import MA, eval_ds
-
-from basic_net.dataset import dt_ma
-
+from MA.dataset import MA, eval_ds
 
 torch.cuda.set_device(0)
 
@@ -69,7 +66,7 @@ def train(args, model):
     #                     num_workers=1, batch_size=1, shuffle=True)
 
 
-    loader = DataLoader(dt_ma(args.datadir, input_transform, target_transform),
+    loader = DataLoader(MA(args.datadir, input_transform, target_transform),
         num_workers=args.num_workers, batch_size=args.batch_size, shuffle=True)
 
     weight = torch.ones(2)
@@ -92,29 +89,6 @@ def train(args, model):
         optimizer = SGD(model.parameters(), 1e-2, .9, 1e-4)
     if args.model.startswith('Seg'):
         optimizer = SGD(model.parameters(), 1e-3, .9)
-
-    # for epoch in range(1, 51):
-    #     epoch_loss = []
-    #
-    #     for step, (images, labels) in enumerate(loader):
-    #         if use_cuda:
-    #             images = images.cuda()
-    #             labels = labels.cuda()
-    #
-    #         inputs = Variable(images)
-    #         targets = Variable(labels)
-    #         outputs = model(inputs)
-    #
-    #         optimizer.zero_grad()
-    #         loss = criterion(outputs, targets[:, 0])
-    #         loss.backward()
-    #         optimizer.step()
-    #
-    #         epoch_loss.append(loss.data[0])
-    #
-    #         average = sum(epoch_loss) / len(epoch_loss)
-    #         print(f'loss: {average} (epoch: {epoch}, step: {step})')
-
 
     if args.steps_plot > 0:
         board = Dashboard(args.port)
@@ -155,40 +129,6 @@ def train(args, model):
                 filename = f'{args.model}-{epoch:03}-{step:04}.pth'
                 torch.save(model.state_dict(), filename)
                 print(f'save: {filename} (epoch: {epoch}, step: {step})')
-
-
-
-# def evaluate(args, model):
-#     model.eval()
-#
-#     im = Image.open(args.image)
-#     np_im = np.array(im)
-#
-#     row = math.ceil(np_im.shape[0]/256)
-#     column = math.ceil(np_im.shape[1]/256)
-#
-#     label = np.zeros(im.shape)
-#
-#     for i in range(row):
-#         for j in range(column):
-#             im_patch = np_im[
-#                 i*256:(i+1)*256, j*256:(j+1)*256
-#             ]
-#             im_patch = input_transform(Image.fromarray(im_patch))
-#
-#             label_patch = model(Variable(im_patch, volatile=True).unsqueeze(0))
-#
-#             # label_patch = label_patch[0].cpu().max(0)[1].data
-#
-#             label_patch = color_transform(label_patch[0].data.max(0)[1])
-#             label_patch = np.array(image_transform(label_patch))
-#             label[i*256:(i+1)*256, j*256:(j+1)*256] = label_patch
-#
-#     # image = input_transform(Image.open(args.image))
-#     # label = model(Variable(image, volatile=True).unsqueeze(0))
-#     # label = color_transform(label[0].data.max(0)[1])
-#
-#     Image.fromarray(label).save(args.label)
 
 
 def evaluate(args, model):
