@@ -97,7 +97,7 @@ def train(opt, model, use_cuda):
                 labels = labels.cuda()
             inputs = Variable(images)
             targets = Variable(labels)
-            print(inputs)
+
             outputs = model(inputs)
 
             optimizer.zero_grad()
@@ -148,7 +148,8 @@ def main():
         model.load_state_dict(torch.load(opt.state))
 
     if use_cuda:
-        model = torch.nn.DataParallel(model).cuda()
+        model = model.cuda()
+        # model = torch.nn.DataParallel(model).cuda()
 
     if opt.mode == 'train':
         train(opt, model, use_cuda)
