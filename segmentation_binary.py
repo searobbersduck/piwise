@@ -19,7 +19,7 @@ from basic_net.network import FCN8
 
 import torch.backends.cudnn as cudnn
 
-torch.cuda.set_device(0)
+# torch.cuda.set_device(0)
 
 def arg_parse():
     parser = argparse.ArgumentParser(description='Segmentation algorithm parameters')
@@ -97,6 +97,7 @@ def train(opt, model, use_cuda):
                 labels = labels.cuda()
             inputs = Variable(images)
             targets = Variable(labels)
+            print(inputs)
             outputs = model(inputs)
 
             optimizer.zero_grad()
