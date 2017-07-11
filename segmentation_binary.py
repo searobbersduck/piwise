@@ -92,6 +92,7 @@ def train(opt, model, use_cuda):
         epoch_loss = []
         for step, (images, labels) in enumerate(loader):
             if use_cuda:
+                print('use cuda!!!!!!')
                 images = images.cuda()
                 labels = labels.cuda()
             inputs = Variable(images)
