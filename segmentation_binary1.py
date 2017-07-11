@@ -24,12 +24,14 @@ from piwise.transform import Colorize
 from piwise.visualize import Dashboard
 
 
-import MA
+# import MA
 
 from torchvision.transforms import Compose, CenterCrop, Scale, Normalize
 
 from MA.transform import ToLabel, Relabel
-from MA.dataset import MA, eval_ds
+# from MA.dataset import MA, eval_ds
+
+from basic_net.dataset import dt_ma
 
 torch.cuda.set_device(0)
 
@@ -66,7 +68,7 @@ def train(args, model):
     #                     num_workers=1, batch_size=1, shuffle=True)
 
 
-    loader = DataLoader(MA(args.datadir, input_transform, target_transform),
+    loader = DataLoader(dt_ma(args.datadir, input_transform, target_transform),
         num_workers=args.num_workers, batch_size=args.batch_size, shuffle=True)
 
     weight = torch.ones(2)
