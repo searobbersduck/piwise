@@ -132,8 +132,8 @@ def main():
     print('===> Parsing options:')
     opt = arg_parse()
     print(opt)
-    cudnn.benchmark = True
-    torch.manual_seed(1)
+    # cudnn.benchmark = True
+    # torch.manual_seed(1)
 
     use_cuda = opt.cuda and torch.cuda.is_available()
 
@@ -148,8 +148,8 @@ def main():
         model.load_state_dict(torch.load(opt.state))
 
     if use_cuda:
-        model = model.cuda()
-        # model = torch.nn.DataParallel(model).cuda()
+        # model = model.cuda()
+        model = torch.nn.DataParallel(model)
 
     if opt.mode == 'train':
         train(opt, model, use_cuda)
