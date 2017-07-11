@@ -72,6 +72,7 @@ def train(opt, model, use_cuda):
     loader = DataLoader(dt_ma(opt.root, input_transform, target_transform),
                         num_workers=opt.workers,
                         batch_size=opt.batch,
+                        pin_memory=True,
                         shuffle=True)
     weight = torch.ones(2)
     weight[0] = 0
@@ -149,7 +150,7 @@ def main():
 
     if use_cuda:
         # model = model.cuda()
-        model = torch.nn.DataParallel(model)
+        model = torch.nn.DataParallel(model).cuda()
 
     if opt.mode == 'train':
         train(opt, model, use_cuda)
