@@ -45,6 +45,9 @@ labels_path = os.path.join(opt.root, 'labels')
 images_1024_path = os.path.join(opt.root, 'images_1024')
 labels_1024_path = os.path.join(opt.root, 'labels_1024')
 
+images_512_path = os.path.join(opt.root, 'images_512')
+labels_512_path = os.path.join(opt.root, 'labels_512')
+
 # check path exist
 if not os.path.exists(images_path):
     print('Error! {} is not exist!'.format(images_path))
@@ -91,3 +94,42 @@ for i in images_list:
     else:
         continue
 
+
+# if not os.path.exists(images_512_path):
+#     os.mkdir(images_512_path)
+#     print('Create images path for 512x512 resolution:')
+#
+# if not os.path.exists(labels_512_path):
+#     os.mkdir(labels_512_path)
+#     print('Create label path for 512x512 resotlution:')
+#
+# from glob import glob
+# from PIL import Image
+#
+# images_list = glob(os.path.join(images_path, '*.jpg'))
+# labels_list = glob(os.path.join(labels_path, '*.png'))
+#
+# scale_size = 512
+#
+# for i in images_list:
+#     base_str = os.path.basename(i).split('.')[0]
+#     # l = os.path.join(labels_path, base_str+'_mask.png')
+#     l = os.path.join(labels_path, base_str+'_EX.png')
+#     if l in labels_list:
+#         img = Image.open(i)
+#         label = Image.open(l)
+#         w,h = img.size
+#         tw = th = (min(w,h))
+#         img = img.crop((w // 2 - tw // 2, h // 2 - th // 2, w // 2 + tw // 2, h // 2 + th // 2))
+#         label = label.crop((w // 2 - tw // 2, h // 2 - th // 2, w // 2 + tw // 2, h // 2 + th // 2))
+#         tw, th = (scale_size, scale_size)
+#         w,h = img.size
+#         ratio = tw/w
+#         assert ratio == th/h
+#         if ratio <= 1:
+#             img.resize((tw, th), Image.ANTIALIAS)
+#             label.resize((tw, th), Image.ANTIALIAS)
+#         img.save(os.path.join(images_512_path, base_str+'_512.png'))
+#         label.save(os.path.join(labels_512_path, base_str+'_label_512.png'))
+#     else:
+#         continue
