@@ -44,7 +44,7 @@ class dt_ex(Dataset):
         self.labels_root = os.path.join(root, 'labels_{}'.format(resolution))
         self.resolution = resolution
 
-        self.base_str_filenames = [os.path.basename(f).split('.')[0].split('_')[0] for i in os.listdir(self.images_root)]
+        self.base_str_filenames = [os.path.basename(f).split('.')[0].split('_')[0] for f in os.listdir(self.images_root)]
         self.base_str_filenames.sort()
 
         self.input_transform = input_transform
@@ -52,9 +52,9 @@ class dt_ex(Dataset):
 
     def __getitem__(self, item):
         filename = self.base_str_filenames[item]
-        with open(os.path.join(self.images_root, filename+'_{}.png'.format(self.resolution))) as f:
+        with open(os.path.join(self.images_root, filename+'_{}.png'.format(self.resolution)), 'rb') as f:
             image = Image.open(f).convert('RGB')
-        with open(os.path.join(self.labels_root, filename+'_label_{}.png'.format(self.resolution))) as f:
+        with open(os.path.join(self.labels_root, filename+'_label_{}.png'.format(self.resolution)), 'rb') as f:
             label = Image.open(f).convert('P')
 
         if self.input_transform is not None:
