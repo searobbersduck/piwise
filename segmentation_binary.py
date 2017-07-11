@@ -94,7 +94,7 @@ def train(opt, model, use_cuda):
         for step, (images, labels) in enumerate(loader):
             if use_cuda:
                 print('use cuda!!!!!!')
-                images = images.cuda()
+                images = images
                 labels = labels.cuda()
             inputs = Variable(images)
             targets = Variable(labels)
@@ -133,8 +133,8 @@ def main():
     print('===> Parsing options:')
     opt = arg_parse()
     print(opt)
-    # cudnn.benchmark = True
-    # torch.manual_seed(1)
+    cudnn.benchmark = True
+    torch.manual_seed(1)
 
     use_cuda = opt.cuda and torch.cuda.is_available()
 
@@ -150,7 +150,7 @@ def main():
 
     if use_cuda:
         # model = model.cuda()
-        model = torch.nn.DataParallel(model).cuda()
+        model = torch.nn.DataParallel(model, [0], 0).cuda()
 
     if opt.mode == 'train':
         train(opt, model, use_cuda)
