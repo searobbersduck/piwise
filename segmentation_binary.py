@@ -19,7 +19,6 @@ from basic_net.network import FCN8
 
 import torch.backends.cudnn as cudnn
 
-torch.cuda.set_device(0)
 
 def arg_parse():
     parser = argparse.ArgumentParser(description='Segmentation algorithm parameters')
@@ -82,7 +81,7 @@ def train(opt, model, use_cuda):
     else:
         criterion = CrossEntropyLoss2d(weight)
 
-    criterion = CrossEntropyLoss2d()
+    criterion = CrossEntropyLoss2d().cuda()
 
     optimizer = SGD(model.parameters(), 1e-4, .9, 2e-5)
 
@@ -94,7 +93,7 @@ def train(opt, model, use_cuda):
         for step, (images, labels) in enumerate(loader):
             if use_cuda:
                 print('use cuda!!!!!!')
-                images = images
+                images = images.cuda()
                 labels = labels.cuda()
             inputs = Variable(images)
             targets = Variable(labels)
@@ -125,7 +124,7 @@ def train(opt, model, use_cuda):
                 print(f'loss: {average} (epoch: {epoch}, step: {step})')
             if opt.steps_save > 0 and step % opt.steps_save == 0:
                 filename = f'fcn8-{epoch:03}-{step:04}.pth'
-                torch.save(model.cpu().state_dict(), filename)
+                torch.save(model.state_dict(), filename)
                 print(f'save: {filename} (epoch: {epoch}, step: {step})')
 
 
@@ -149,8 +148,7 @@ def main():
         model.load_state_dict(torch.load(opt.state))
 
     if use_cuda:
-        # model = model.cuda()
-        model = torch.nn.DataParallel(model, [0], 0).cuda()
+        model = torch.nn.DataParallel(model).cuda()
 
     if opt.mode == 'train':
         train(opt, model, use_cuda)
