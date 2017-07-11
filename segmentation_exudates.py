@@ -47,15 +47,15 @@ color_transform = Colorize()
 image_transform = ToPILImage()
 
 input_transform = Compose([
-    Scale(256),
-    CenterCrop(256),
+    Scale(512),
+    CenterCrop(512),
     ToTensor(),
     Normalize([.485, .456, .406], [.229, .224, .225]),
 ])
 
 target_transform = Compose([
-    Scale(256),
-    CenterCrop(256),
+    Scale(512),
+    CenterCrop(512),
     ToLabel(),
     Relabel(255, 1)
 ])
