@@ -144,11 +144,14 @@ def main():
 
     model = get_model()
 
-    if opt.state:
-        model.load_state_dict(torch.load(opt.state))
+    # if opt.state:
+    #     model.load_state_dict(torch.load(opt.state))
 
     if use_cuda:
         model = torch.nn.DataParallel(model).cuda()
+
+    if opt.state:
+        model.load_state_dict(torch.load(opt.state))
 
     if opt.mode == 'train':
         train(opt, model, use_cuda)
