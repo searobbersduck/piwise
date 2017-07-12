@@ -44,20 +44,51 @@ patch_size = (256,256)
 # print(patch_list)
 
 
-filenames = [image_basename(f) for f in os.listdir('/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata/labels')]
+# filenames = [image_basename(f) for f in os.listdir('/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata/labels')]
+# filenames.sort()
+#
+# image_root = '/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata/images'
+# label_root = '/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata/labels'
+#
+# image_gen_root = '/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata_patches/images'
+# label_gen_root = '/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata_patches/labels'
+
+# for f in filenames:
+#     im_labels = Image.open(label_path(label_root, f))
+#     im1_labels = np.array(im_labels)
+#     im_images = Image.open(image_path(image_root, f))
+#     im1_images = np.array(im_images)
+#     patch_list = get_patch_pos(im1_labels.shape, patch_size, im1_labels)
+#     for p in patch_list:
+#         iml = im1_labels[
+#             p[0] * patch_size[0]:(p[0]+1) * patch_size[0], p[1] * patch_size[1]:(p[1]+1) * patch_size[1]
+#         ]
+#         imi = im1_images[
+#               p[0] * patch_size[0]:(p[0] + 1) * patch_size[0], p[1] * patch_size[1]:(p[1] + 1) * patch_size[1]
+#         ]
+#         pil_iml = Image.fromarray(iml)
+#         pil_imi = Image.fromarray(imi)
+#         pil_iml.save(label_gen_root+'/'+'{}_{}_{}.png'.format(f, p[0], p[1]))
+#         pil_imi.save(image_gen_root + '/' + '{}_{}_{}.jpg'.format(f, p[0], p[1]))
+
+
+filenames = [image_basename(f) for f in os.listdir('/Users/zhangweidong03/data/ex/ex/labels')]
 filenames.sort()
 
-image_root = '/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata/images'
-label_root = '/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata/labels'
+image_root = '/Users/zhangweidong03/data/ex/ex/images'
+label_root = '/Users/zhangweidong03/data/ex/ex/labels'
 
-image_gen_root = '/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata_patches/images'
-label_gen_root = '/Users/zhangweidong03/Code/dl/pytorch/github/piwise/MAdata_patches/labels'
+image_gen_root = '/Users/zhangweidong03/data/ex/ex_patches/images'
+label_gen_root = '/Users/zhangweidong03/data/ex/ex_patches/labels'
 
 
 for f in filenames:
     im_labels = Image.open(label_path(label_root, f))
     im1_labels = np.array(im_labels)
-    im_images = Image.open(image_path(image_root, f))
+    img = image_path(image_root, f.replace('_EX', ''))
+    if not os.path.isfile(img):
+        continue
+    im_images = Image.open(image_path(image_root, f.replace('_EX', '')))
     im1_images = np.array(im_images)
     patch_list = get_patch_pos(im1_labels.shape, patch_size, im1_labels)
     for p in patch_list:
@@ -70,4 +101,4 @@ for f in filenames:
         pil_iml = Image.fromarray(iml)
         pil_imi = Image.fromarray(imi)
         pil_iml.save(label_gen_root+'/'+'{}_{}_{}.png'.format(f, p[0], p[1]))
-        pil_imi.save(image_gen_root + '/' + '{}_{}_{}.jpg'.format(f, p[0], p[1]))
+        pil_imi.save(image_gen_root + '/' + '{}_{}_{}.png'.format(f, p[0], p[1]))
