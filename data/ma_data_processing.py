@@ -82,7 +82,8 @@ if not os.path.isdir(ahe_images_path):
 
 from glob import glob
 
-images_list = glob(os.path.join(images_path, '*.png'))
+# images_list = glob(os.path.join(images_path, '*.png'))
+images_list = glob(os.path.join(images_path, '*.jpg'))
 
 for image in images_list:
     base_str = os.path.basename(image).split('.')[0]
