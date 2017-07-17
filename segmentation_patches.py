@@ -151,7 +151,7 @@ def train(args, model):
                 average = sum(epoch_loss) / len(epoch_loss)
                 print(f'loss: {average} (epoch: {epoch}, step: {step})')
             if args.steps_save > 0 and step % args.steps_save == 0:
-                filename = f'{args.model}-{epoch:03}-{step:04}.pth'
+                filename = f'{args.model}-{args.exp}-{epoch:03}-{step:04}.pth'
                 torch.save(model.state_dict(), filename)
                 print(f'save: {filename} (epoch: {epoch}, step: {step})')
 
@@ -274,5 +274,6 @@ if __name__ == '__main__':
     parser_train.add_argument('--steps-loss', type=int, default=50)
     parser_train.add_argument('--steps-plot', type=int, default=0)
     parser_train.add_argument('--steps-save', type=int, default=500)
+    parser_train.add_argument('--exp', default='segmentation_patches')
 
     main(parser.parse_args())
