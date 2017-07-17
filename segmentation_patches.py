@@ -118,7 +118,7 @@ def train(args, model):
     if args.steps_plot > 0:
         board = Dashboard(args.port)
 
-    for epoch in range(1, args.num_epochs+1):
+    for epoch in range(1, args.epochs+1):
         epoch_loss = []
 
         for step, (images, labels) in enumerate(loader):
