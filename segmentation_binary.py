@@ -69,6 +69,7 @@ def get_model():
 
 
 def train(opt, model, use_cuda):
+    model.train()
     loader = DataLoader(dt_ma(opt.root, input_transform, target_transform),
                         num_workers=opt.workers,
                         batch_size=opt.batch,
