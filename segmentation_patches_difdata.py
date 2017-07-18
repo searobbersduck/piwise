@@ -24,12 +24,12 @@ from piwise.transform import Colorize
 from piwise.visualize import Dashboard
 
 
-# import MA
+import MA
 
 from torchvision.transforms import Compose, CenterCrop, Scale, Normalize
 
 from MA.transform import ToLabel, Relabel
-# from MA.dataset import MA, eval_ds
+from MA.dataset import MA, eval_ds
 
 from basic_net.dataset import dt_ma
 
@@ -68,7 +68,7 @@ def train(args, model):
     #                     num_workers=1, batch_size=1, shuffle=True)
 
 
-    loader = DataLoader(dt_ma(args.root, input_transform, target_transform),
+    loader = DataLoader(MA(args.root, input_transform, target_transform),
         num_workers=args.workers, batch_size=args.batch, shuffle=True)
 
     weight = torch.ones(2)
@@ -274,6 +274,6 @@ if __name__ == '__main__':
     parser_train.add_argument('--steps-loss', type=int, default=50)
     parser_train.add_argument('--steps-plot', type=int, default=0)
     parser_train.add_argument('--steps-save', type=int, default=500)
-    parser_train.add_argument('--exp', default='segmentation_patches')
+    parser_train.add_argument('--exp', default='difdata')
 
     main(parser.parse_args())
