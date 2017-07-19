@@ -207,6 +207,7 @@ if __name__ == '__main__':
 
     parser_eval = subparsers.add_parser('eval')
     parser_eval.add_argument('--root')
+    parser_eval.add_argument('--postfix', default='eval_label')
     parser_eval.add_argument('--workers', type=int, default=4)
     parser_eval.add_argument('--batch', type=int, default=1)
 
