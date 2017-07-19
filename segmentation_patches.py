@@ -152,6 +152,7 @@ def evaluate(args, model):
 
         for index in range(len(filenames)):
             o_lablel = outputs[index].data.max(0)[1]
+            o_lablel = color_transform(o_lablel)
             o_path = os.path.join(eval_labels, filenames[index]+'_'+args.postfix+'.png')
             print('save: {}'.format(o_path))
             image_transform(o_lablel).save(o_path)
