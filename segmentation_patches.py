@@ -191,8 +191,8 @@ def main(args):
                 map_location=lambda storage, loc: storage))
 
     if args.mode == 'eval':
-        print('eval is not ready!')
-        # evaluate(args, model)
+        # print('eval is not ready!')
+        evaluate(args, model)
     if args.mode == 'train':
         train(args, model)
 
