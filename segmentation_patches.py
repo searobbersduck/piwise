@@ -147,11 +147,11 @@ def evaluate(args, model):
         os.mkdir(eval_labels)
 
     for step, (images, filenames) in enumerate(loader):
-        inputs = Variable(images, volatile=True)
+        inputs = Variable(images.cuda(), volatile=True)
         outputs = model(inputs)
 
         for index in range(len(filenames)):
-            o_lablel = outputs[index].data.max(0)[1]
+            o_lablel = outputs[index].cpu().max(0)[1].data
             o_lablel = color_transform(o_lablel)
             o_path = os.path.join(eval_labels, filenames[index]+'_'+args.postfix+'.png')
             print('save: {}'.format(o_path))
