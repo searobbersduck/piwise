@@ -31,7 +31,9 @@ from torchvision.transforms import Compose, CenterCrop, Scale, Normalize
 from MA.transform import ToLabel, Relabel
 # from MA.dataset import MA, eval_ds
 
-from basic_net.dataset import dt_ma
+from basic_net.dataset import dt_ma, eval_dt_ma
+
+import os
 
 # torch.cuda.set_device(1)
 
@@ -92,28 +94,6 @@ def train(args, model):
     if args.model.startswith('Seg'):
         optimizer = SGD(model.parameters(), 1e-3, .9)
 
-    # for epoch in range(1, 51):
-    #     epoch_loss = []
-    #
-    #     for step, (images, labels) in enumerate(loader):
-    #         if use_cuda:
-    #             images = images.cuda()
-    #             labels = labels.cuda()
-    #
-    #         inputs = Variable(images)
-    #         targets = Variable(labels)
-    #         outputs = model(inputs)
-    #
-    #         optimizer.zero_grad()
-    #         loss = criterion(outputs, targets[:, 0])
-    #         loss.backward()
-    #         optimizer.step()
-    #
-    #         epoch_loss.append(loss.data[0])
-    #
-    #         average = sum(epoch_loss) / len(epoch_loss)
-    #         print(f'loss: {average} (epoch: {epoch}, step: {step})')
-
 
     if args.steps_plot > 0:
         board = Dashboard(args.port)
@@ -156,61 +136,25 @@ def train(args, model):
                 print(f'save: {filename} (epoch: {epoch}, step: {step})')
 
 
+def evaluate(args, model):
+    model.eval()
 
-# def evaluate(args, model):
-#     model.eval()
-#
-#     im = Image.open(args.image)
-#     np_im = np.array(im)
-#
-#     row = math.ceil(np_im.shape[0]/256)
-#     column = math.ceil(np_im.shape[1]/256)
-#
-#     label = np.zeros(im.shape)
-#
-#     for i in range(row):
-#         for j in range(column):
-#             im_patch = np_im[
-#                 i*256:(i+1)*256, j*256:(j+1)*256
-#             ]
-#             im_patch = input_transform(Image.fromarray(im_patch))
-#
-#             label_patch = model(Variable(im_patch, volatile=True).unsqueeze(0))
-#
-#             # label_patch = label_patch[0].cpu().max(0)[1].data
-#
-#             label_patch = color_transform(label_patch[0].data.max(0)[1])
-#             label_patch = np.array(image_transform(label_patch))
-#             label[i*256:(i+1)*256, j*256:(j+1)*256] = label_patch
-#
-#     # image = input_transform(Image.open(args.image))
-#     # label = model(Variable(image, volatile=True).unsqueeze(0))
-#     # label = color_transform(label[0].data.max(0)[1])
-#
-#     Image.fromarray(label).save(args.label)
+    loader = DataLoader(eval_dt_ma(args.root, input_transform, target_transform),
+        num_workers=args.workers, batch_size=args.batch, shuffle=False)
 
+    eval_labels = os.path.join(args.root, 'eval_labels')
+    if not os.path.isdir(eval_labels):
+        os.mkdir(eval_labels)
 
-# def evaluate(args, model):
-#     model.eval()
-#
-#     loader = DataLoader(
-#         eval_ds(args.image, eval_input_transform),
-#         num_workers=1, batch_size=1, shuffle=False)
-#
-#     raw = Image.open(args.image)
-#
-#     np_img = np.zeros((1024,1024,3), dtype=np.uint8)
-#
-#     for i, (batch, row, col) in enumerate(loader):
-#         label = model(Variable(batch,  volatile=True))
-#         label = color_transform(label[0].data.max(0)[1])
-#         # image_transform(label).save('{}_{}'.format(i,args.label))
-#         img_patch = np.asarray(image_transform(label))
-#         np_img[row*256:(row+1)*256, col*256:(col+1)*256] = img_patch
-#
-#     out_img = Image.fromarray(np_img)
-#     out_img = Image.blend(raw, out_img, 0.7)
-#     out_img.save('blend_{}'.format(args.label))
+    for step, (images, filenames) in enumerate(loader):
+        inputs = Variable(images.cuda())
+        outputs = model(inputs)
+
+        for index in range(len(filenames)):
+            o_lablel = outputs[index].data.max(0)[1]
+            o_path = os.path.join(eval_labels, filenames[index]+'_'+args.postfix+'.png')
+            print('save: {}'.format(o_path))
+            image_transform(o_lablel).save(o_path)
 
 
 def main(args):
@@ -262,8 +206,10 @@ if __name__ == '__main__':
     subparsers.required = True
 
     parser_eval = subparsers.add_parser('eval')
-    parser_eval.add_argument('image')
-    parser_eval.add_argument('label')
+    parser_eval.add_argument('--root')
+    parser_eval.add_argument('--workers', type=int, default=4)
+    parser_eval.add_argument('--batch', type=int, default=1)
+
 
     parser_train = subparsers.add_parser('train')
     parser_train.add_argument('--port', type=int, default=80)
