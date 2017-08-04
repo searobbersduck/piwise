@@ -16,7 +16,7 @@ import sys
 sys.path.append('..')
 
 from piwise.network import FCN8, FCN16, FCN32, UNet, PSPNet, SegNet
-from torchvision.transforms import Compose, CenterCrop, Scale, Normalize, ToTensor
+from torchvision.transforms import Compose, CenterCrop, Scale, Normalize, ToTensor, ToPILImage
 
 __all__ = [
 
@@ -32,6 +32,8 @@ eval_input_transform = Compose([
     ToTensor(),
     Normalize([.485, .456, .406], [.229, .224, .225]),
 ])
+
+image_transform = ToPILImage()
 
 def tight_crop(img, size=None):
     img_gray = np.mean(img, 2)
@@ -118,6 +120,8 @@ class DRImageSegmentor(object):
         o_label = output[0].cpu().max(0)[1].data
         np_label = o_label.numpy()
         print(np_label)
+        pil_label = image_transform(o_label)
+        print(pil_label)
         # pil_label = Image.fromarray(np_label)
         # pil_label.show()
         # pil_label.save('test.png')
