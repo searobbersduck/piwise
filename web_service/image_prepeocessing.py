@@ -75,7 +75,7 @@ def get_patch(raw, x, y, w, h):
 
 
 def main():
-    pil_img = Image.open('/Users/zhangweidong03/Code/dl/pytorch/github/pi/piwise/MAdata/images/C0000887.jpg')
+    pil_img = Image.open('1.jpg')
     # pil_patch = get_patch(pil_img, 1000,1000, 256, 256)
     # pil_patch = get_ahe_patch(pil_img, 1000,1000, 256, 256)
     # p1 = pil_patch
