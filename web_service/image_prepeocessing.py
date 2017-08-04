@@ -118,13 +118,13 @@ class DRImageSegmentor(object):
         input_var = torch.autograd.Variable(input, volatile=True)
         output = self.model(input_var)
         o_label = output[0].cpu().max(0)[1].data
-        np_label = o_label.numpy()
-        print(np_label)
-        pil_label = image_transform(o_label)
-        print(pil_label)
+        o_label_b = o_label.type(torch.ByteTensor)
+        o_label_b *= 255
+        pil_label = image_transform(o_label_b)
+        pil_label.resize(raw_patch.size)
         # pil_label = Image.fromarray(np_label)
         # pil_label.show()
-        # pil_label.save('test.png')
+        pil_label.save('test.png')
 
 
 
