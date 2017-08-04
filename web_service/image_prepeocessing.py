@@ -77,7 +77,7 @@ def get_patch(raw, x, y, w, h):
 
 
 def main():
-    pil_img = Image.open('1.jpg')
+    pil_img = Image.open('1.png')
     # pil_patch = get_patch(pil_img, 1000,1000, 256, 256)
     # pil_patch = get_ahe_patch(pil_img, 1000,1000, 256, 256)
     # p1 = pil_patch
@@ -86,7 +86,7 @@ def main():
     # pil_patch.show()
     # p1.show()
     seg = DRImageSegmentor('fcn8', '1.pth', eval_input_transform)
-    seg.segment(pil_img, 1000,1000, 256, 256)
+    seg.segment(pil_img, 0,0, 256, 256)
 
 
 # this class use cuda as default
