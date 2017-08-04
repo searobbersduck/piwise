@@ -117,9 +117,10 @@ class DRImageSegmentor(object):
         output = self.model(input_var)
         o_label = output[0].cpu().max(0)[1].data
         np_label = o_label.numpy()
-        pil_label = Image.fromarray(np_label)
+        print(np_label)
+        # pil_label = Image.fromarray(np_label)
         # pil_label.show()
-        pil_label.save('test.png')
+        # pil_label.save('test.png')
 
 
 
