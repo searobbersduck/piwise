@@ -148,7 +148,7 @@ class DRImageSegmentor(object):
         o_label_b *= 255
         pil_label = image_transform(o_label_b)
         print('image label resized to: {}'.format(raw_patch.size))
-        pil_label.resize(raw_patch.size)
+        pil_label = pil_label.resize(raw_patch.size, resample=Image.BICUBIC)
         print('image label resized to: {}'.format(pil_label.size))
         # pil_label = Image.fromarray(np_label)
         # pil_label.show()
