@@ -4,7 +4,10 @@ from PIL import Image
 
 from io import BytesIO
 
-conn = http.client.HTTPConnection('127.0.0.1', port=8003)
+# conn = http.client.HTTPConnection('127.0.0.1', port=8003)
+
+conn = http.client.HTTPConnection('yq01-idl-gpu-online9.yq01.baidu.com', port=8002)
+
 
 data = open('/Users/zhangweidong03/Code/dl/pytorch/github/pi/piwise/MAdata/images/C0000886.jpg', 'rb').read()
 

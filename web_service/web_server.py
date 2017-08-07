@@ -45,24 +45,25 @@ class ImageHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         print('Content type: {0}'.format(self.headers['Content-type']))
-        if self.headers['Content-type'] == 'image/jpeg':
-            self._record()
-        elif self.headers['Content-type'] == 'text/plain':
-            print('begin outside _segment')
-            self._segment()
+        # if self.headers['Content-type'] == 'image/jpeg':
+        #     self._record()
+        # elif self.headers['Content-type'] == 'text/plain':
+        #     print('begin outside _segment')
+        #     self._segment()
+        self._segment()
 
     def _segment(self):
         data1 = self.rfile.read(int(self.headers['Content-Length']))
         stream = BytesIO(data1)
         image = Image.open(stream)
-        coord = self.headers['coord']
-        print('coord: '+ coord)
-        coords = coord.split(' ')
-        x = int(coords[1])
-        y = int(coords[2])
-        w = int(coords[3])
-        h = int(coords[4])
-        print('x:{0}/y:{1}/w:{2}/h:{3}'.format(x, y, w, h))
+        # coord = self.headers['coord']
+        # print('coord: '+ coord)
+        # coords = coord.split(' ')
+        # x = int(coords[1])
+        # y = int(coords[2])
+        # w = int(coords[3])
+        # h = int(coords[4])
+        # print('x:{0}/y:{1}/w:{2}/h:{3}'.format(x, y, w, h))
         pil_image = seg.segment(image)
         imgByteArr = io.BytesIO()
         pil_image.save(imgByteArr, format='jpeg')
