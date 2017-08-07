@@ -137,6 +137,7 @@ class DRImageSegmentor(object):
             self.model.eval()
             self.model_loaded = True
         raw_patch = get_ahe_patch(image)
+        print('raw ahe image size is: {}'.format(raw_patch.size))
         # resize_patch = raw_patch.resize((256,256), resample=Image.BILINEAR)
         input = torch.stack([self.trans(raw_patch)])
         input = input.cuda()
@@ -147,6 +148,7 @@ class DRImageSegmentor(object):
         o_label_b *= 255
         pil_label = image_transform(o_label_b)
         pil_label.resize(raw_patch.size)
+        print('image label resized to: {}'.format(pil_label))
         # pil_label = Image.fromarray(np_label)
         # pil_label.show()
         # pil_label.save('test.png')
