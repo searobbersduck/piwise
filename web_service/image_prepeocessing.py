@@ -147,8 +147,9 @@ class DRImageSegmentor(object):
         o_label_b = o_label.type(torch.ByteTensor)
         o_label_b *= 255
         pil_label = image_transform(o_label_b)
+        print('image label resized to: {}'.format(raw_patch.size))
         pil_label.resize(raw_patch.size)
-        print('image label resized to: {}'.format(pil_label))
+        print('image label resized to: {}'.format(pil_label.size))
         # pil_label = Image.fromarray(np_label)
         # pil_label.show()
         # pil_label.save('test.png')
