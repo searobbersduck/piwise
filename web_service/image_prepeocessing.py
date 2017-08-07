@@ -19,8 +19,11 @@ from piwise.network import FCN8, FCN16, FCN32, UNet, PSPNet, SegNet
 from torchvision.transforms import Compose, CenterCrop, Scale, Normalize, ToTensor, ToPILImage
 
 __all__ = [
-
+    'DRImageSegmentor',
+    'eval_input_transform',
+    'get_segmentor',
 ]
+
 
 
 
@@ -75,16 +78,17 @@ def get_patch(raw, x, y, w, h):
     patch = raw.crop((x, y, x + w, y + h))
     return patch
 
+def get_ahe_patch(raw):
+    patch = raw
+    patch = np.array(patch, dtype=np.float32)
+    patch /= 255
+    ahe_patch = channelwise_ahe(patch)
+    pil_patch = Image.fromarray(skimage.util.img_as_ubyte(ahe_patch))
+    return pil_patch
+
 
 def main():
     pil_img = Image.open('1.png')
-    # pil_patch = get_patch(pil_img, 1000,1000, 256, 256)
-    # pil_patch = get_ahe_patch(pil_img, 1000,1000, 256, 256)
-    # p1 = pil_patch
-    # pil_patch.show()
-    # p1 = p1.resize((128,128))
-    # pil_patch.show()
-    # p1.show()
     seg = DRImageSegmentor('fcn8', '1.pth', eval_input_transform)
     seg.segment(pil_img, 0,0, 256, 256)
 
@@ -124,8 +128,33 @@ class DRImageSegmentor(object):
         pil_label.resize(raw_patch.size)
         # pil_label = Image.fromarray(np_label)
         # pil_label.show()
-        pil_label.save('test.png')
+        # pil_label.save('test.png')
+        return pil_label
 
+    def segment(self, image):
+        if not self.model_loaded:
+            self.model = self.load_model(self.weights)
+            self.model.eval()
+            self.model_loaded = True
+        raw_patch = get_ahe_patch(image)
+        # resize_patch = raw_patch.resize((256,256), resample=Image.BILINEAR)
+        input = torch.stack([self.trans(raw_patch)])
+        input = input.cuda()
+        input_var = torch.autograd.Variable(input, volatile=True)
+        output = self.model(input_var)
+        o_label = output[0].cpu().max(0)[1].data
+        o_label_b = o_label.type(torch.ByteTensor)
+        o_label_b *= 255
+        pil_label = image_transform(o_label_b)
+        pil_label.resize(raw_patch.size)
+        # pil_label = Image.fromarray(np_label)
+        # pil_label.show()
+        # pil_label.save('test.png')
+        return pil_label
+
+
+def get_segmentor():
+    return DRImageSegmentor('fcn8', '1.pth', eval_input_transform)
 
 
 if __name__ == '__main__':
