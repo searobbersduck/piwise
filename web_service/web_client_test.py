@@ -11,7 +11,7 @@ conn = http.client.HTTPConnection('yq01-idl-gpu-online9.yq01.baidu.com', port=80
 
 # data = open('/Users/zhangweidong03/Code/dl/pytorch/github/pi/piwise/MAdata/images/C0000886.jpg', 'rb').read()
 
-patch = '/Users/zhangweidong03/data/ex/ex_patches/images/C0014792_EX_6_4.png'
+patch = '/Users/zhangweidong03/data/ex/ex_patches/images/C0024407_EX_4_3.png'
 
 data = open(patch, 'rb').read()
 

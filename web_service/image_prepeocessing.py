@@ -11,6 +11,8 @@ import numpy as np
 
 import torch
 
+import cv2
+
 import sys
 
 sys.path.append('..')
@@ -86,11 +88,21 @@ def get_ahe_patch(raw):
     pil_patch = Image.fromarray(skimage.util.img_as_ubyte(ahe_patch))
     return pil_patch
 
+def erode_and_dilate(pil_img):
+    cv_label = np.array(pil_img)
+    thresh, cv_label = cv2.threshold(cv_label, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    kernel = np.ones((4, 4), np.uint8)  # 生成一个6x6的核
+    erosion = cv2.erode(cv_label, kernel, iterations=1)  # 调用腐蚀算法
+    dilation = cv2.dilate(erosion, kernel, iterations=1)  # 调用膨胀算法
+    pil_label = Image.fromarray(dilation)
+    return pil_label
+
 
 def main():
     pil_img = Image.open('1.png')
     seg = DRImageSegmentor('fcn8', '1.pth', eval_input_transform)
     seg.segment(pil_img, 0,0, 256, 256)
+
 
 
 # this class use cuda as default
@@ -153,6 +165,7 @@ class DRImageSegmentor(object):
         # pil_label = Image.fromarray(np_label)
         # pil_label.show()
         # pil_label.save('test.png')
+        pil_label = erode_and_dilate(pil_label)
         return pil_label
 
 
