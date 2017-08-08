@@ -6,7 +6,9 @@ from io import BytesIO
 
 # conn = http.client.HTTPConnection('127.0.0.1', port=8003)
 
-conn = http.client.HTTPConnection('yq01-idl-gpu-online9.yq01.baidu.com', port=8002)
+# conn = http.client.HTTPConnection('yq01-idl-gpu-online9.yq01.baidu.com', port=8002)
+
+conn = http.client.HTTPConnection("face.baidu.com")
 
 
 # data = open('/Users/zhangweidong03/Code/dl/pytorch/github/pi/piwise/MAdata/images/C0000886.jpg', 'rb').read()
@@ -20,7 +22,9 @@ print('raw image patch size is: {}'.format(img_ref.size))
 
 headers = {"Content-type": "image/jpeg", "Accept": "q=0.6, image/jpeg", "Content-Length": str(len(data))}
 
-conn.request('GET', "", data, headers)
+# conn.request('GET', "", data, headers)
+conn.request('GET', "/test/for/med/segment", data, headers)
+
 
 r = conn.getresponse()
 
