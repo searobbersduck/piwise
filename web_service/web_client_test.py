@@ -13,7 +13,8 @@ conn = http.client.HTTPConnection("face.baidu.com")
 
 # data = open('/Users/zhangweidong03/Code/dl/pytorch/github/pi/piwise/MAdata/images/C0000886.jpg', 'rb').read()
 
-patch = '/Users/zhangweidong03/data/ex/ex_patches/images/C0024407_EX_4_3.png'
+# patch = '/Users/zhangweidong03/data/ex/ex_patches/images/C0024407_EX_4_3.png'
+patch = '/Users/zhangweidong03/Code/dl/pytorch/github/pi/piwise/MAdata/images/C0001273.jpg'
 
 data = open(patch, 'rb').read()
 
