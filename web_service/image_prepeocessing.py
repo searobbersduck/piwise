@@ -122,7 +122,7 @@ class DRImageSegmentor(object):
         model.load_state_dict(torch.load(weights))
         return model
 
-    def segment(self, image, x, y, w, h):
+    def segment_region(self, image, x, y, w, h):
         if not self.model_loaded:
             self.model = self.load_model(self.weights)
             self.model.eval()

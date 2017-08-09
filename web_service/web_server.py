@@ -90,7 +90,7 @@ class ImageHTTPRequestHandler(BaseHTTPRequestHandler):
         w = int(coords[2])
         h = int(coords[3])
         print('x:{0}/y:{1}/w:{2}/h:{3}'.format(x, y, w, h))
-        pil_image = seg.segment(image,x,y,w,h)
+        pil_image = seg.segment_region(image,x,y,w,h)
         imgByteArr = io.BytesIO()
         pil_image.save(imgByteArr, format='jpeg')
         imgByteArr = imgByteArr.getvalue()
