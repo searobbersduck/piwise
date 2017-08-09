@@ -102,7 +102,6 @@ class ImageHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(imgByteArr)
 
-        self.wfile.write(imgByteArr)
 
 
 
