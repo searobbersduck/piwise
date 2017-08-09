@@ -68,7 +68,7 @@ def channelwise_ahe(img):
     return img_ahe
 
 # raw is PIL Image
-def get_ahe_patch(raw, x, y, w, h):
+def get_ahe_patch_region(raw, x, y, w, h):
     patch = raw.crop((x,y,x+w,y+h))
     patch = np.array(patch, dtype=np.float32)
     patch /= 255
@@ -127,7 +127,7 @@ class DRImageSegmentor(object):
             self.model = self.load_model(self.weights)
             self.model.eval()
             self.model_loaded = True
-        raw_patch = get_ahe_patch(image, x, y, w, h)
+        raw_patch = get_ahe_patch_region(image, x, y, w, h)
         # resize_patch = raw_patch.resize((256,256), resample=Image.BILINEAR)
         input = torch.stack([self.trans(raw_patch)])
         input = input.cuda()
