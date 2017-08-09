@@ -50,7 +50,9 @@ class ImageHTTPRequestHandler(BaseHTTPRequestHandler):
         # elif self.headers['Content-type'] == 'text/plain':
         #     print('begin outside _segment')
         #     self._segment()
-        self._segment()
+        # self._segment()
+        self._segment_
+
 
     def _segment(self):
         data1 = self.rfile.read(int(self.headers['Content-Length']))
@@ -76,29 +78,29 @@ class ImageHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(imgByteArr)
 
-        def _segment_region(self):
-            data1 = self.rfile.read(int(self.headers['Content-Length']))
-            stream = BytesIO(data1)
-            image = Image.open(stream)
-            coord = self.headers['coord']
-            print('coord: '+ coord)
-            coords = coord.split(' ')
-            x = int(coords[1])
-            y = int(coords[2])
-            w = int(coords[3])
-            h = int(coords[4])
-            print('x:{0}/y:{1}/w:{2}/h:{3}'.format(x, y, w, h))
-            pil_image = seg.segment(image)
-            imgByteArr = io.BytesIO()
-            pil_image.save(imgByteArr, format='jpeg')
-            imgByteArr = imgByteArr.getvalue()
-            self.send_response(HTTPStatus.OK)
-            # self.send_header("Content-type", 'text/plain')
-            # self.send_header("image_uid", str('111111'))
-            self.send_header("Content-type", 'image/jpeg')
-            self.send_header("image_uid", str('111111'))
-            self.end_headers()
-            self.wfile.write(imgByteArr)
+    def _segment_region(self):
+        data1 = self.rfile.read(int(self.headers['Content-Length']))
+        stream = BytesIO(data1)
+        image = Image.open(stream)
+        coord = self.headers['coord']
+        print('coord: '+ coord)
+        coords = coord.split(' ')
+        x = int(coords[1])
+        y = int(coords[2])
+        w = int(coords[3])
+        h = int(coords[4])
+        print('x:{0}/y:{1}/w:{2}/h:{3}'.format(x, y, w, h))
+        pil_image = seg.segment(image)
+        imgByteArr = io.BytesIO()
+        pil_image.save(imgByteArr, format='jpeg')
+        imgByteArr = imgByteArr.getvalue()
+        self.send_response(HTTPStatus.OK)
+        # self.send_header("Content-type", 'text/plain')
+        # self.send_header("image_uid", str('111111'))
+        self.send_header("Content-type", 'image/jpeg')
+        self.send_header("image_uid", str('111111'))
+        self.end_headers()
+        self.wfile.write(imgByteArr)
 
 
 
