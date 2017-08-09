@@ -102,9 +102,6 @@ class ImageHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(imgByteArr)
 
-        self.send_header("Content-type", 'image/jpeg')
-        self.send_header("image_uid", str('222222'))
-        self.end_headers()
         self.wfile.write(imgByteArr)
 
 

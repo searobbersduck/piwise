@@ -44,6 +44,23 @@ print('image label size is: {}'.format(pil_img.size))
 
 pil_img.show()
 
+
+# r = conn.getresponse()
+#
+# image_uid = r.headers['image_uid']
+#
+# print('image uid: {}'.format(image_uid))
+
+img = r.read()
+
+img = BytesIO(img)
+
+pil_img = Image.open(img)
+
+print('image label size is: {}'.format(pil_img.size))
+
+pil_img.show()
+
 # headers = {"Content-type": "text/plain", "coord":"1000 1000 256 256", "image_uid":image_uid}
 #
 # conn.request('GET', "", "", headers=headers)
