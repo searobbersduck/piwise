@@ -54,6 +54,11 @@ class ImageHTTPRequestHandler(BaseHTTPRequestHandler):
         self._segment_region()
 
 
+    def do_POST(self):
+        print('Content type: {0}'.format(self.headers['Content-type']))
+        self._segment_region()
+
+
     def _segment(self):
         data1 = self.rfile.read(int(self.headers['Content-Length']))
         stream = BytesIO(data1)
