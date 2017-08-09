@@ -137,10 +137,12 @@ class DRImageSegmentor(object):
         o_label_b = o_label.type(torch.ByteTensor)
         o_label_b *= 255
         pil_label = image_transform(o_label_b)
-        pil_label.resize(raw_patch.size)
+        pil_label = pil_label.resize(raw_patch.size, resample=Image.BICUBIC)
         # pil_label = Image.fromarray(np_label)
         # pil_label.show()
         # pil_label.save('test.png')
+        pil_label = erode_and_dilate(pil_label)
+        pil_label = raw_patch
         return pil_label
 
     def segment(self, image):

@@ -20,7 +20,8 @@ data = open(patch, 'rb').read()
 img_ref = Image.open(patch)
 print('raw image patch size is: {}'.format(img_ref.size))
 
-headers = {"Content-type": "image/jpeg", "Accept": "q=0.6, image/jpeg", "Content-Length": str(len(data))}
+# headers = {"Content-type": "image/jpeg", "Accept": "q=0.6, image/jpeg", "Content-Length": str(len(data)), "coord":"1000 1000 256 256",}
+headers = {"Content-type": "image/jpeg", "Accept": "q=0.6, image/jpeg", "Content-Length": str(len(data)), "coord":"1000 1000 256 256",}
 
 # conn.request('GET', "", data, headers)
 conn.request('GET', "/test/for/med/segment", data, headers)
