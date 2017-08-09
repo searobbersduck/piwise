@@ -51,7 +51,7 @@ class ImageHTTPRequestHandler(BaseHTTPRequestHandler):
         #     print('begin outside _segment')
         #     self._segment()
         # self._segment()
-        self._segment_
+        self._segment_region()
 
 
     def _segment(self):
