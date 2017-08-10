@@ -142,7 +142,7 @@ class DRImageSegmentor(object):
         # pil_label.show()
         # pil_label.save('test.png')
         pil_label = erode_and_dilate(pil_label)
-        pil_label = raw_patch
+        # pil_label = raw_patch
         return pil_label
 
     def segment(self, image):
@@ -168,7 +168,7 @@ class DRImageSegmentor(object):
         # pil_label.show()
         # pil_label.save('test.png')
         pil_label = erode_and_dilate(pil_label)
-        pil_label = raw_patch
+        # pil_label = raw_patch
         return pil_label
 
 
